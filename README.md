@@ -1,4 +1,3 @@
-# react-native-sdk
 # Using Truecaller SDK with your React App
 
 ## Getting started
