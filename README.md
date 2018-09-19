@@ -25,7 +25,7 @@ To ensure the authenticity of the interactions between your app and Truecaller, 
 
 (Note) To update the SDK file, simply replace this .aar file with latest one
 ```
-	compile files('libs/truesdk-0.6.aar')
+	compile files('libs/truesdk-v0.7-releasePartner.aar')
 ```
 	
 6. Add you partner key in react-native-truecaller manifest file
