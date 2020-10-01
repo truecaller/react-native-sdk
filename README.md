@@ -214,11 +214,19 @@ Now to invoke the verification dialog, simply call the authenticate() method
     TruecallerAuthModule(ReactApplicationContext reactContext) {
        super(reactContext);
       TruecallerSdkScope trueScope = new TruecallerSdkScope.Builder(reactContext, sdkCallback)
-         .consentMode(TruecallerSdkScope.CONSENT_MODE_POPUP )
-         .consentTitleOption( TruecallerSdkScope.SDK_CONSENT_TITLE_VERIFY )
-         .footerType( TruecallerSdkScope.FOOTER_TYPE_CONTINUE )
-         .sdkOptions( TruecallerSdkScope.SDK_OPTION_WITHOUT_OTP )
-         .build();
+         .consentMode(TruecallerSdkScope.CONSENT_MODE_BOTTOMSHEET)
+        .buttonColor(Color.parseColor("COLOUR-STRING/HEX-CODE"))
+        .buttonTextColor(Color.parseColor("COLOUR-STRING/HEX-CODE"))
+        .loginTextPrefix(TruecallerSdkScope.LOGIN_TEXT_PREFIX_TO_GET_STARTED)
+        .loginTextSuffix(TruecallerSdkScope.LOGIN_TEXT_SUFFIX_PLEASE_VERIFY_MOBILE_NO)
+        .ctaTextPrefix(TruecallerSdkScope.CTA_TEXT_PREFIX_USE)
+        .buttonShapeOptions(TruecallerSdkScope.BUTTON_SHAPE_ROUNDED)
+        .privacyPolicyUrl("<YOUR-PRIVACY-POLICY-URL>")
+        .termsOfServiceUrl("<YOUR-TERMS-OF-SERVICE-URL>")
+        .footerType(TruecallerSdkScope.FOOTER_TYPE_NONE)
+        .consentTitleOption(TruecallerSdkScope.SDK_CONSENT_TITLE_LOG_IN)
+        .sdkOptions(TruecallerSdkScope.SDK_OPTION_WITHOUT_OTP)
+        .build();
       TruecallerSDK.init(trueScope);
      reactContext.addActivityEventListener(mActivityEventListener);  
     }
