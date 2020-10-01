@@ -1,199 +1,291 @@
-# Using Truecaller SDK with your React App
+# Using Truecaller SDK with your ReactNative App
 
 ## Getting started
 
-- Run the following command to add the react-native-truecaller dependency with your react app
+React Native//TruecallerSDK Integration guide
 
-`npm install react-native-truecaller --save` or `yarn add react-native-truecaller`
+STEP 1: Adding dependency[Add the following dependency in your app level build.gradle file]
 
-- for linking both android and ios, run the following command
-`
-	react-native link
-`
-  
-### Basic Configuration
-
-To ensure the authenticity of the interactions between your app and Truecaller, you need to generate a partner key from the truecaller developer portal ( https://developer.truecaller.com/auth/login )
-
-#### Integrating Truecaller SDK in your android module
-
-1. Download the project zip file from the [Android SDK release section](https://github.com/truecaller/android-sdk)
-2. Unzip the file
-3. Copy the SDK .aar File in your project directory
-4. Add the above extracted .aar file into libs folder of your react-native-truecaller (path : react-native-truecaller -> android -> libs -> .arr file)
-5. Add it in react-native-truecaller gradle file
-
-(Note) To update the SDK file, simply replace this .aar file with latest one
-```
-	compile files('libs/truesdk-v0.7-releasePartner.aar')
-```
-	
-6. Add you partner key in react-native-truecaller manifest file
-
-```
-	<meta-data android:name="com.truecaller.android.sdk.PartnerKey" android:value="@string/YourPartnerKey"/>
-```
-
-7. Open your strings.xml file. Example path: /app/src/main/res/values/strings.xml and add a new string with the name "partnerKey" and value as your "PartnerKey"
-
-#### Integrating Truecaller SDK in your iOS module
-
-Please ensure the following things before integrating:
-
-1. You have the app ID in the "Apple development portal". If you do not have App ID yet, then open Project -> Capabilities -> Enable Associated domains. New app id will be automatically created by Xcode.
-2. Sign up at https://developer.truecaller.com/sign-up
-3. Truecaller SDK is already available in RCTTruecaller libray so there is no need to integrate the SDK in the project again unless a new version of SDK is available
-
-To integrate the SDK with your project -
-
-1. Download the project zip file from the [iOS SDK release section](https://github.com/truecaller/ios-sdk/releases)
-2. Unzip the file
-3. Remove Old version SDK folder
-4. Copy the TruecallerSDK project files into RCTTruecaller Libray (TrueSDK directory, TrueSDKTests directory and TrueSDK.xcodeproj)
-5. Drag and drop TrueSDK.xcodeproj into RCTTruecaller Libray(i.e. add it as a subproject to your main project)
+- implementation "com.truecaller.android.sdk:truecaller-sdk:2.4.0"
 
 
-##### Usage
 
-Add the entry truesdk under LSApplicationQueriesSchemes in into your Info.plist file
+STEP 2: Setting up the key
 
-```
-<key>LSApplicationQueriesSchemes</key>
-<array>
-<string>truesdk</string>
-</array>
-```
-
-![Associated domains](https://raw.githubusercontent.com/truecaller/ios-sdk/master/documentation/images/associated-domains.png)
-
-Add the associated domain provided by Truecaller (for example applinks:si44524554ef8e45b5aa83ced4e96d5xxx.truecallerdevs.com) in Your project -> Capabilities > Associated Domains. The prefix 'applinks:' is needed for universal links to function properly. 
-
-**Important:** Replace the '**https://**' part from the provided app link with "**applinks:**". ie _`https://si44524554ef8e45b5aa83ced4e96d5xxx.truecallerdevs.com`_ should become _`applinks:si44524554ef8e45b5aa83ced4e96d5xxx.truecallerdevs.com`_ while adding to entitlements.
-
-(Note that there is **no** _http://_ or _https://_ prefix when setting up the applinks:)
+ - Please refer to the documentation here(https://docs.truecaller.com/truecaller-sdk/android/generating-app-key) for generating the keys. Once done please refer here(https://docs.truecaller.com/truecaller-sdk/android/integrating-with-your-app/app-key-configuration) to configure the key with your app. 
 
 
-1. Import the TruecallerSDK framework in the class where you want to initialize it (for example AppDelegate.m) and in the class that you want to receive the profile response. 
 
-    ```objectivec
-    #import "TrueSDK/TrueSDK.h"
-    ```
+STEP 3: Creating TruecallerAuthModule.java
 
-2. In AppDelegate implement the method `application:continueUserActivity:restorationHandler:` and call the corresponding method of the `[TCTrueSDK sharedManager]`. 
-If the method returns false that means the activity need not be addressed by Truecaller SDK and you can handle it as desired.
+In your   “Project-Folder/Android/……../java”   folder create a new java file “TruecallerAuthModule.java” (File mentioned below). 
 
-    ```objectivec
-    - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
-        return [[TCTrueSDK sharedManager] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+
+
+STEP 4: Registering the TruecallerAuthModule (TruecallerAuthPackage.java)
+
+Now to register the module, in the same folder, create another java file namely TruecallerAuthPackage.java (File mentioned below)
+[PS: If a module is not registered it will not be available from JavaScript]
+
+
+STEP 5: Adding your package in MainApplication.java    
+
+The package needs to be provided in the getPackages method of the MainApplication.java file, like this: 
+
+      -  packages.add(new TruecallerAuthPackage());
+
+
+STEP 6: Invoking TruecallerAuthentication.
+
+Once through with the steps above, go to your JS file where you wish to invoke the truecallerSDK verification dialog and import NativeModules from react-native. 
+
+       - import { NativeModules } from ‘react-native’;
+
+Now create an object - TruecallerAuthModule - of Native Module. 
+
+       - const {TruecallerAuthModule} = NativeModules; 
+
+Now to invoke the verification dialog, simply call the authenticate() method
+
+       - TruecallerAuthModule.authenticate();
+
+
+*Note : Please refer to the documentation here(https://docs.truecaller.com/truecaller-sdk/android/integrating-with-your-app) to study the flow of the SDK once invoked. 
+
+
+
+
+
+
+
+
+
+
+[File1] -  TruecallerAuthModule.java
+
+    packages com.example	
+
+    import android.app.Activity;
+    import android.widget.Toast;
+    import android.util.Log;
+    import androidx.annotation.NonNull;
+    import androidx.annotation.Nullable;
+    import androidx.fragment.app.FragmentActivity;
+    import android.content.Intent;
+    import com.facebook.react.bridge.Arguments;
+    import com.facebook.react.bridge.Promise;
+    import com.facebook.react.bridge.ReactApplicationContext;
+    import com.facebook.react.bridge.ReactContext;
+    import com.facebook.react.bridge.ReactContextBaseJavaModule;
+    import com.facebook.react.bridge.BaseActivityEventListener;
+    import com.facebook.react.bridge.ActivityEventListener;
+    import com.facebook.react.bridge.ReactMethod;
+    import com.facebook.react.bridge.WritableMap;
+    import com.facebook.react.modules.core.DeviceEventManagerModule;
+    import com.truecaller.android.sdk.ITrueCallback;
+    import com.truecaller.android.sdk.TrueError;
+    import com.truecaller.android.sdk.TrueException;
+    import com.truecaller.android.sdk.TrueProfile;
+    import com.truecaller.android.sdk.TruecallerSDK;
+    import com.truecaller.android.sdk.TruecallerSdkScope;
+    import com.truecaller.android.sdk.clients.VerificationCallback;
+    import com.truecaller.android.sdk.clients.VerificationDataBundle;
+    import static com.truecaller.android.sdk.clients.VerificationDataBundle.KEY_OTP;
+
+    public class TruecallerAuthModule extends ReactContextBaseJavaModule {
+
+    private Promise promise = null;
+
+    private final ITrueCallback sdkCallback = new ITrueCallback() {
+      @Override
+      public void onSuccessProfileShared(@NonNull final TrueProfile trueProfile) {
+   
+    if (promise != null) {
+        WritableMap map = Arguments.createMap();
+        map.putBoolean("successful", true);
+        map.putString("firstName", trueProfile.firstName);
+        map.putString("lastName", trueProfile.lastName);
+        map.putString("phoneNumber", trueProfile.phoneNumber);
+        map.putString("gender", trueProfile.gender);
+        map.putString("street", trueProfile.street);
+        map.putString("city", trueProfile.city);
+        map.putString("zipcode", trueProfile.zipcode);
+        map.putString("countryCode", trueProfile.countryCode);
+        map.putString("facebookId", trueProfile.facebookId);
+        map.putString("twitterId", trueProfile.twitterId);
+        map.putString("email", trueProfile.email);
+        map.putString("url", trueProfile.url);
+        map.putString("avatarUrl", trueProfile.avatarUrl);
+        map.putBoolean("isVerified", trueProfile.isTrueName);
+        map.putBoolean("isAmbassador", trueProfile.isAmbassador);
+        map.putString("companyName", trueProfile.companyName);
+        map.putString("jobTitle", trueProfile.jobTitle);
+        map.putString("payload", trueProfile.payload);
+        map.putString("signature", trueProfile.signature);
+        map.putString("signatureAlgorithm", trueProfile.signatureAlgorithm);
+        map.putString("requestNonce", trueProfile.requestNonce);
+        promise.resolve(map);
+          }
     }
-    ```
-
-3. Applinks and Appkey will be initialized in react-native code (`TRUECALLER.initializeClientIOS(APPKEY,APPLINKS)`)
-
-
-## Example Snippet to initiate TrueClient with your react app 
-
-  ``` java
+    @Override
+    public void onFailureProfileShared(@NonNull final TrueError trueError) {
+      Log.d("TruecallerAuthModule", Integer.toString(trueError.getErrorType()));
+      if (promise != null) {
+        String errorReason = null;
+        switch (trueError.getErrorType()) {
+          case TrueError.ERROR_TYPE_INTERNAL:
+            errorReason = "ERROR_TYPE_INTERNAL";
+            break;
+          case TrueError.ERROR_TYPE_NETWORK:
+            errorReason = "ERROR_TYPE_NETWORK";
+            break;
+          case TrueError.ERROR_TYPE_USER_DENIED:
+            errorReason = "ERROR_TYPE_USER_DENIED";
+            break;
+          case TrueError.ERROR_PROFILE_NOT_FOUND:
+            errorReason = "ERROR_TYPE_UNAUTHORIZED_PARTNER";
+            break;
+          case TrueError.ERROR_TYPE_UNAUTHORIZED_USER:
+            errorReason = "ERROR_TYPE_UNAUTHORIZED_USER";
+            break;
+          case TrueError.ERROR_TYPE_TRUECALLER_CLOSED_UNEXPECTEDLY:
+            errorReason = "ERROR_TYPE_TRUECALLER_CLOSED_UNEXPECTEDLY";
+            break;
+          case TrueError.ERROR_TYPE_TRUESDK_TOO_OLD:
+            errorReason = "ERROR_TYPE_TRUESDK_TOO_OLD";
+            break;
+          case TrueError.ERROR_TYPE_POSSIBLE_REQ_CODE_COLLISION:
+            errorReason = "ERROR_TYPE_POSSIBLE_REQ_CODE_COLLISION";
+            break;
+          case TrueError.ERROR_TYPE_RESPONSE_SIGNATURE_MISMATCH:
+            errorReason = "ERROR_TYPE_RESPONSE_SIGNATURE_MISSMATCH";
+            break;
+          case TrueError.ERROR_TYPE_REQUEST_NONCE_MISMATCH:
+            errorReason = "ERROR_TYPE_REQUEST_NONCE_MISSMATCH";
+            break;
+          case TrueError.ERROR_TYPE_INVALID_ACCOUNT_STATE:
+            errorReason = "ERROR_TYPE_INVALID_ACCOUNT_STATE";
+            break;
+          case TrueError.ERROR_TYPE_TC_NOT_INSTALLED:
+            errorReason = "ERROR_TYPE_TC_NOT_INSTALLED";
+            break;
+        }
+        WritableMap map = Arguments.createMap();
+        map.putString("error", errorReason != null ? errorReason : "ERROR_TYPE_NULL");
+        promise.resolve(map);
+      }
+    }
+    @Override
+    public void onVerificationRequired() {
+    //The statement below can be ignored incase of One-tap flow integration
+      TruecallerSDK.getInstance().requestVerification("IN", PHONE_NUMBER_STRING, apiCallback,(FragmentActivity) getCurrentActivity());
+      }
+    };
   
-import TRUECALLER,{TRUECALLEREvent} from "react-native-truecaller"
 
-	type Props = {};
-	export default class App extends Component<Props> 
-	{
-  		constructor(props) 
-  		{
-			super(props);
-			this.state = { name :"", phone:"", address:"", email:"", job:"", company:"", countryCode:"", gender:"", url:avatar, 
-		};
-		this.onButtonPress=this.onButtonPress.bind(this)
-  	}
-	
-	componentDidMount()
-	{
-		if(Platform.OS=="ios"){
-			TRUECALLER.initializeClientIOS(`APPKEY`,`APPLINKS`)
-		}
-		else{
-			TRUECALLER.initializeClient();
-		}
-	}
-	
-	onButtonPress()
-	{
-		TRUECALLER.on(TRUECALLEREvent.TrueProfileResponse, (profile) => 
-		{
-			this.setState({
-				name:profile.firstName+" "+profile.lastName,
-				phone:profile.phoneNumber,
-				address:profile.city,
-				email:profile.email,
-				job:profile.jobTitle,
-				company:profile.companyName,
-				countryCode:profile.countryCode,
-				gender:profile.gender?"Male":"Female",
-				url:{uri:profile.avatarUrl}
-			})
-		});
-		
-		TRUECALLER.on(TRUECALLEREvent.TrueProfileResponseError, (error) => 
-		{
-			Toast.show(error.profile,Toast.SHORT);
-		});
-		
-		TRUECALLER.requestTrueProfile();
-	}
-	
- ```
- 
- Implement the following callbacks methods -
- 
- ```java
-	
-	TRUECALLER.initializeClient()
-		// set callback to reach react library in android
-	
-	TRUECALLER.initializeClientIOS(`APPKEY`,`APPLINKS`)
-		// set APPKEY and  APPLINKS  for TrueSDK  And set delegate  to reach react library in ios
-	
-	TRUECALLER.requestTrueProfile()  
-		// method to request profile form Truecaller app
-	
-	TRUECALLER.on(TRUECALLEREvent.TrueProfileResponse, (profile) => 
-	{
-		// after fetching profile, this callback would be returned in both android and ios
-	}
-	
-	TRUECALLER.on(TRUECALLEREvent.TrueProfileResponseError, (error) => 
-	{
-		// this callback will be called in case of any error
-	});
-	
-```   
-     
-- To access the user profile details from the profile object in your react app, use the following paramters - 
+    //Callback below can be ignored incase of One-tap only integration 
 
-  ```
-  profile.firstName  
-  profile.lastName
-  profile.phoneNumber
-  profile.gender
-  profile.street
-  profile.city
-  profile.zipcode
-  profile.countryCode
-  profile.facebookId
-  profile.twitterId
-  profile.email
-  profile.url
-  profile.avatarUrl
-  profile.isTrueName
-  profile.companyName
-  profile.jobTitle
-  profile.payload
-  profile.signature
-  profile.signatureAlgorithm
-  profile.requestNonce
-  profile.isSimChanged
-  profile.verificationMode
-  
-  ```
+    final VerificationCallback apiCallback = new VerificationCallback() {
+        @Override
+    public void onRequestSuccess(int requestCode, @Nullable VerificationDataBundle extras) {
+    if (requestCode == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
+      }
+    if (requestCode == VerificationCallback.TYPE_MISSED_CALL_RECEIVED) {
+        TrueProfile profile = new TrueProfile.Builder(firstName, lastName).build();
+        TruecallerSDK.getInstance().verifyMissedCall(profile, apiCallback);
+      }
+    if (requestCode == VerificationCallback.TYPE_OTP_INITIATED) {
+      }
+    if (requestCode == VerificationCallback.TYPE_OTP_RECEIVED) {
+        TrueProfile profile = new TrueProfile.Builder(firstName, lastName).build();
+        TruecallerSDK.getInstance().verifyOtp(profile, KEY_OTP, apiCallback);
+      }
+      if (requestCode == VerificationCallback.TYPE_VERIFICATION_COMPLETE) {
+     }
+      if (requestCode == VerificationCallback.TYPE_PROFILE_VERIFIED_BEFORE) {
+      }
+    }
+    @Override
+    public void onRequestFailure(final int requestCode, @NonNull final TrueException e) {
+      //Write the Exception Part
+        }  
+    };
+
+    TruecallerAuthModule(ReactApplicationContext reactContext) {
+       super(reactContext);
+      TruecallerSdkScope trueScope = new TruecallerSdkScope.Builder(reactContext, sdkCallback)
+         .consentMode(TruecallerSdkScope.CONSENT_MODE_POPUP )
+         .consentTitleOption( TruecallerSdkScope.SDK_CONSENT_TITLE_VERIFY )
+         .footerType( TruecallerSdkScope.FOOTER_TYPE_CONTINUE )
+         .sdkOptions( TruecallerSdkScope.SDK_OPTION_WITHOUT_OTP )
+         .build();
+      TruecallerSDK.init(trueScope);
+     reactContext.addActivityEventListener(mActivityEventListener);  
+    }
+
+    @Override
+    public String getName() {
+        return "TruecallerAuthModule";
+    }
+
+    @ReactMethod
+    public void showToast(Promise promise) {
+         Toast.makeText(getReactApplicationContext(), "hello", Toast.LENGTH_LONG).show();
+         promise.resolve(null);
+    }
+
+    @ReactMethod
+    public void authenticate(Promise promise) {
+        try {
+             this.promise = promise;
+               if (TruecallerSDK.getInstance() != null) {
+                    TruecallerSDK.getInstance().getUserProfile((FragmentActivity) getCurrentActivity());
+                } else {
+                      WritableMap map = Arguments.createMap();
+                      map.putString("error", "ERROR_TYPE_NOT_SUPPORTED");
+                      this.promise.resolve(map);
+              }
+          } catch (Exception e) {
+                  this.promise.reject(e);
+               }
+           }
+
+     private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
+        @Override
+        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
+            super.onActivityResult(activity, requestCode, resultCode, intent);
+         if (requestCode == 100) {
+             TruecallerSDK.getInstance().onActivityResultObtained((FragmentActivity)activity, resultCode, intent);
+            }
+          }
+        }; 
+
+
+
+
+
+[File2]  - TruecallerAuthPackage.java
+
+
+     package com.example;
+
+    import com.facebook.react.ReactPackage;
+    import com.facebook.react.bridge.NativeModule;
+    import com.facebook.react.bridge.ReactApplicationContext;
+    import com.facebook.react.uimanager.ViewManager;
+    import java.util.ArrayList;
+    import java.util.Collections;
+    import java.util.List;
+    
+    public class TruecallerAuthPackage implements ReactPackage {
+      @Override
+      public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+          return Collections.emptyList();
+      }
+      @Override
+      public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
+          List<NativeModule> nativeModules = new ArrayList<>();
+          nativeModules.add(new TruecallerAuthModule(reactContext));
+          return nativeModules;
+        }
+      }
