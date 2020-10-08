@@ -30,7 +30,7 @@ Now to register the module, in the same folder, create another java file namely 
 [PS: If a module is not registered it will not be available from JavaScript]
 
 
-**STEP 5: Adding your package in MainApplication.java **    
+**STEP 5: Adding your package in MainApplication.java**    
 
 The package needs to be provided in the getPackages method of the MainApplication.java file, like this: 
 
