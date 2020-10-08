@@ -2,7 +2,7 @@
 
 ## Getting started
 
-React Native//TruecallerSDK Integration guide
+######React Native//TruecallerSDK Integration guide
 
 **STEP 1: Adding dependency**
 
