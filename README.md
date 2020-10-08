@@ -4,7 +4,9 @@
 
 React Native//TruecallerSDK Integration guide
 
-**STEP 1: Adding dependency**[Add the following dependency in your app level build.gradle file]
+**STEP 1: Adding dependency**
+
+[Add the following dependency in your app level build.gradle file]
 
 - implementation "com.truecaller.android.sdk:truecaller-sdk:2.4.0"
 
