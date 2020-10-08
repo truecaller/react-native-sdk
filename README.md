@@ -4,38 +4,38 @@
 
 React Native//TruecallerSDK Integration guide
 
-STEP 1: Adding dependency[Add the following dependency in your app level build.gradle file]
+**STEP 1: Adding dependency**[Add the following dependency in your app level build.gradle file]
 
 - implementation "com.truecaller.android.sdk:truecaller-sdk:2.4.0"
 
 
 
-STEP 2: Setting up the key
+**STEP 2: Setting up the key**
 
  - Please refer to the documentation here(https://docs.truecaller.com/truecaller-sdk/android/generating-app-key) for generating the keys. Once done please refer here(https://docs.truecaller.com/truecaller-sdk/android/integrating-with-your-app/app-key-configuration) to configure the key with your app. 
 
 
 
-STEP 3: Creating TruecallerAuthModule.java
+**STEP 3: Creating TruecallerAuthModule.java**
 
 In your   “Project-Folder/Android/……../java”   folder create a new java file “TruecallerAuthModule.java” (File mentioned below). 
 
 
 
-STEP 4: Registering the TruecallerAuthModule (TruecallerAuthPackage.java)
+**STEP 4: Registering the TruecallerAuthModule (TruecallerAuthPackage.java)**
 
 Now to register the module, in the same folder, create another java file namely TruecallerAuthPackage.java (File mentioned below)
 [PS: If a module is not registered it will not be available from JavaScript]
 
 
-STEP 5: Adding your package in MainApplication.java    
+**STEP 5: Adding your package in MainApplication.java **    
 
 The package needs to be provided in the getPackages method of the MainApplication.java file, like this: 
 
       -  packages.add(new TruecallerAuthPackage());
 
 
-STEP 6: Invoking TruecallerAuthentication.
+**STEP 6: Invoking TruecallerAuthentication**
 
 Once through with the steps above, go to your JS file where you wish to invoke the truecallerSDK verification dialog and import NativeModules from react-native. 
 
