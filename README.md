@@ -180,7 +180,7 @@ Now to invoke the verification dialog, simply call the authenticate() method
     @Override
     public void onVerificationRequired() {
     //The statement below can be ignored incase of One-tap flow integration
-      TruecallerSDK.getInstance().requestVerification("IN", PHONE_NUMBER_STRING, apiCallback,(FragmentActivity) getCurrentActivity());
+      TruecallerSDK.getInstance().requestVerification("IN", "PHONE-NUMBER-STRING", apiCallback,(FragmentActivity) getCurrentActivity());
       }
     };
   
@@ -193,14 +193,14 @@ Now to invoke the verification dialog, simply call the authenticate() method
     if (requestCode == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
       }
     if (requestCode == VerificationCallback.TYPE_MISSED_CALL_RECEIVED) {
-        TrueProfile profile = new TrueProfile.Builder(firstName, lastName).build();
+        TrueProfile profile = new TrueProfile.Builder("USER-FIRST-NAME","USER-LAST-NAME").build();
         TruecallerSDK.getInstance().verifyMissedCall(profile, apiCallback);
       }
     if (requestCode == VerificationCallback.TYPE_OTP_INITIATED) {
       }
     if (requestCode == VerificationCallback.TYPE_OTP_RECEIVED) {
-        TrueProfile profile = new TrueProfile.Builder(firstName, lastName).build();
-        TruecallerSDK.getInstance().verifyOtp(profile, KEY_OTP, apiCallback);
+        TrueProfile profile = new TrueProfile.Builder("USER-FIRST-NAME","USER-LAST-NAME").build();
+        TruecallerSDK.getInstance().verifyOtp(profile, "OTP-ENTERED-BY-THE-USER", apiCallback);
       }
       if (requestCode == VerificationCallback.TYPE_VERIFICATION_COMPLETE) {
      }
