@@ -20,7 +20,7 @@
 
 **STEP 3: Creating TruecallerAuthModule.java**
 
-In your   “Project-Folder/Android/……../java”   folder create a new java file “TruecallerAuthModule.java” (File mentioned below). 
+In your   “Project-Folder/Android/……../java”   folder create a new java file “TruecallerAuthModule.java” (File mentioned below).
 
 
 
