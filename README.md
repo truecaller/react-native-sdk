@@ -249,8 +249,13 @@ Now to invoke the verification dialog, simply call the authenticate() method
         try {
              this.promise = promise;
                if (TruecallerSDK.getInstance() != null) {
+                    if(TruecallerSDK.getInstance().isUsable()){
                     TruecallerSDK.getInstance().getUserProfile((FragmentActivity) getCurrentActivity());
-                } else {
+                    }
+      //For One-Tap implementation : The isUsable method would return true incase the truecaller app is installed and logged in else it will return false. 
+      //For Full-Stack implementation : The isUsable method would always return true as now the SDK can be used to verify both truecaller and non-truecaller users
+                    
+               } else {
                       WritableMap map = Arguments.createMap();
                       map.putString("error", "ERROR_TYPE_NOT_SUPPORTED");
                       this.promise.resolve(map);
