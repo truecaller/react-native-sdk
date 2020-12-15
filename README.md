@@ -54,11 +54,8 @@ Now to invoke the verification dialog, simply call the authenticate() method
 
 *Note : Please refer to the documentation here(https://docs.truecaller.com/truecaller-sdk/android/integrating-with-your-app) to study the flow of the SDK once invoked. 
 
-
-
-
-
-
+*Note : In order to clear the resources taken up by the SDK, you can use the method TruecallerSDK.clear(); 
+        Please refer to the documentation here for more info (https://docs.truecaller.com/truecaller-sdk/android/integrating-with-your-app/clearing-sdk-instance). 
 
 
 
@@ -171,6 +168,9 @@ Now to invoke the verification dialog, simply call the authenticate() method
           case TrueError.ERROR_TYPE_TC_NOT_INSTALLED:
             errorReason = "ERROR_TYPE_TC_NOT_INSTALLED";
             break;
+          case TrueError.ERROR_TYPE_ACTIVITY_NOT_FOUND:
+            errorReason = "ERROR_TYPE_ACTIVITY_NOT_FOUND";
+            break;
         }
         WritableMap map = Arguments.createMap();
         map.putString("error", errorReason != null ? errorReason : "ERROR_TYPE_NULL");
@@ -179,13 +179,13 @@ Now to invoke the verification dialog, simply call the authenticate() method
     }
     @Override
     public void onVerificationRequired() {
-    //The statement below can be ignored incase of One-tap flow integration
+    //The statement below can be ignored incase of one-tap flow integration
       TruecallerSDK.getInstance().requestVerification("IN", "PHONE-NUMBER-STRING", apiCallback,(FragmentActivity) getCurrentActivity());
       }
     };
   
 
-    //Callback below can be ignored incase of One-tap only integration 
+    //Callback below can be ignored incase of one-tap only integration 
 
     final VerificationCallback apiCallback = new VerificationCallback() {
         @Override
@@ -252,7 +252,7 @@ Now to invoke the verification dialog, simply call the authenticate() method
                     if(TruecallerSDK.getInstance().isUsable()){
                     TruecallerSDK.getInstance().getUserProfile((FragmentActivity) getCurrentActivity());
                     }
-      //For One-Tap implementation : The isUsable method would return true incase the truecaller app is installed and logged in else it will return false. 
+      //For One-Tap implementation : The isUsable method would return true incase where the truecaller app is installed and logged in else it will return false. 
       //For Full-Stack implementation : The isUsable method would always return true as now the SDK can be used to verify both truecaller and non-truecaller users
                     
                } else {
@@ -264,6 +264,11 @@ Now to invoke the verification dialog, simply call the authenticate() method
                   this.promise.reject(e);
                }
            }
+           
+      @ReactMethod 
+      public void SDKClear(){
+      TruecallerSDK.clear();
+      }
 
      private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
         @Override
