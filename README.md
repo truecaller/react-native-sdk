@@ -8,7 +8,7 @@
 
 [Add the following dependency in your app level build.gradle file]
 
-- implementation "com.truecaller.android.sdk:truecaller-sdk:2.4.0"
+- implementation "com.truecaller.android.sdk:truecaller-sdk:2.5.0"
 
 
 
