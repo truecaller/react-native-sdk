@@ -191,12 +191,23 @@ Now to invoke the verification dialog, simply call the authenticate() method
         @Override
     public void onRequestSuccess(int requestCode, @Nullable VerificationDataBundle extras) {
     if (requestCode == VerificationCallback.TYPE_MISSED_CALL_INITIATED) {
-      }
+    
+    //Retrieving the TTL for missedcall 
+        if(extras != null){
+             extras.getString(VerificationDataBundle.KEY_TTL); 
+        }
+    }
     if (requestCode == VerificationCallback.TYPE_MISSED_CALL_RECEIVED) {
+                  
         TrueProfile profile = new TrueProfile.Builder("USER-FIRST-NAME","USER-LAST-NAME").build();
         TruecallerSDK.getInstance().verifyMissedCall(profile, apiCallback);
       }
     if (requestCode == VerificationCallback.TYPE_OTP_INITIATED) {
+    
+    //Retrieving the TTL for otp 
+        if(extras != null){
+             extras.getString(VerificationDataBundle.KEY_TTL); 
+         }  
       }
     if (requestCode == VerificationCallback.TYPE_OTP_RECEIVED) {
         TrueProfile profile = new TrueProfile.Builder("USER-FIRST-NAME","USER-LAST-NAME").build();
