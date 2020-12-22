@@ -178,7 +178,7 @@ Now to invoke the verification dialog, simply call the authenticate() method
       }
     }
     @Override
-    public void onVerificationRequired() {
+    public void onVerificationRequired(TrueError trueError) {
     //The statement below can be ignored incase of one-tap flow integration
       TruecallerSDK.getInstance().requestVerification("IN", "PHONE-NUMBER-STRING", apiCallback,(FragmentActivity) getCurrentActivity());
       }
