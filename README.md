@@ -123,7 +123,7 @@ Now to invoke the verification dialog, simply call the authenticate() method
         map.putString("signature", trueProfile.signature);
         map.putString("signatureAlgorithm", trueProfile.signatureAlgorithm);
         map.putString("requestNonce", trueProfile.requestNonce);
-        map.putBoolean("isBusines-",trueProfile.isBusiness)
+        map.putBoolean("isBusiness",trueProfile.isBusiness)
         promise.resolve(map);
           }
     }
