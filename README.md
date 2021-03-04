@@ -8,7 +8,7 @@
 
 [Add the following dependency in your app level build.gradle file]
 
-- implementation "com.truecaller.android.sdk:truecaller-sdk:2.5.0"
+- implementation "com.truecaller.android.sdk:truecaller-sdk:2.6.0"
 
 
 
@@ -123,6 +123,7 @@ Now to invoke the verification dialog, simply call the authenticate() method
         map.putString("signature", trueProfile.signature);
         map.putString("signatureAlgorithm", trueProfile.signatureAlgorithm);
         map.putString("requestNonce", trueProfile.requestNonce);
+        map.putBoolean("isBusines-",trueProfile.isBusiness)
         promise.resolve(map);
           }
     }
@@ -285,7 +286,8 @@ Now to invoke the verification dialog, simply call the authenticate() method
         @Override
         public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent intent) {
             super.onActivityResult(activity, requestCode, resultCode, intent);
-         if (requestCode == 100) {
+        
+        if (requestCode == TruecallerSDK.SHARE_PROFILE_REQUEST_CODE) {
              TruecallerSDK.getInstance().onActivityResultObtained((FragmentActivity)activity, resultCode, intent);
             }
           }
