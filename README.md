@@ -123,7 +123,7 @@ Now to invoke the verification dialog, simply call the authenticate() method
         map.putString("signature", trueProfile.signature);
         map.putString("signatureAlgorithm", trueProfile.signatureAlgorithm);
         map.putString("requestNonce", trueProfile.requestNonce);
-        map.putBoolean("isBusiness",trueProfile.isBusiness)
+        map.putBoolean("isBusiness",trueProfile.isBusiness);
         promise.resolve(map);
           }
     }
@@ -288,10 +288,11 @@ Now to invoke the verification dialog, simply call the authenticate() method
             super.onActivityResult(activity, requestCode, resultCode, intent);
         
         if (requestCode == TruecallerSDK.SHARE_PROFILE_REQUEST_CODE) {
-             TruecallerSDK.getInstance().onActivityResultObtained((FragmentActivity)activity, resultCode, intent);
+             TruecallerSDK.getInstance().onActivityResultObtained((FragmentActivity)activity, resultCode, resultCode, intent);
             }
           }
-        }; 
+        };
+     } 
 
 
 
