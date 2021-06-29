@@ -291,8 +291,8 @@ Now to invoke the verification dialog, simply call the authenticate() method
              TruecallerSDK.getInstance().onActivityResultObtained((FragmentActivity)activity, requestCode, resultCode, intent);
             }
           }
-        }; 
-   }
+        };   
+      }
 
 
 
