@@ -62,7 +62,7 @@ Now to invoke the verification dialog, simply call the authenticate() method
 
 [File1] -  TruecallerAuthModule.java
 
-    packages com.example	
+    package com.example	
 
     import android.app.Activity;
     import android.widget.Toast;
